@@ -1,0 +1,74 @@
+(1)   R(A,B,C,D,E) with FD's   AB->C, C->D, D->B, and D->E.
+
+Computing Closures:
+
+{AB}+={A,B,C,D,E} 
+{C}+ ={C,D,B,E} 
+{D}+ ={D,B,E} 
+Keys:  AB, AC, and AD. 
+
+BCNF violations: C->D, D->B, D->E, C->B, and C->E 
+
+Because D-->E is BCNF violation, 
+By decomposing we get S(A,B,C,D) and T(D,E).T is in BCNF but S is not.
+C -> D is in violation of BCNF , decompose S and obtain S1(A,B,C) and S2(C,D).S1 is still in violation of BCNF since the derived FD C -> B is still in violation. 
+So, we split again and get R1(A,C), and R2(B,C). 
+
+The final decomposed relations are R1(A,C),R2(B,C) and T(D,E)
+
+---------------------------------------------------------------------------------------------------------------------------
+(2)  
+Suppose we have the tuples t = (1, 2, 3) and u = (2, 2, 4). We now split and get: 
+	S        T
+    t  (1,2)   (2,3)
+
+    u  (2,2)   (2,4)
+
+After we join, we get the following four tuples: 
+
+* (1,2,2)   -- which is not a tuple of R
+* (1,2,4)   -- which is not a tuple of R
+* (2,2,3)   --  which is not a tuple of R
+* (2,2,4)   -- which is not a tuple of R
+
+--------------------------------------------------------------------------------------------------------------------------
+(3)
+
+Order(Order#, Order_date, Customer#, Total_amount)
+Order_Item(Order#, Item#, Quantity_ordered, Price_each, Total_price, Discount%)
+
+The schema of Order X Order_Item as follows
+T1(Order#,Item#,Order_date, Customer#, Total_amount, Quantity_ordered, Total_price, Discount%)
+Key for the above schema is Order#,Item# and has functional dependencies as following
+Order#,Item# --> Quantity_ordered
+Order#,Item# --> Total_price
+Item# --> Price_each
+Item# --> Discount%
+Order# --> Order_date
+Order# --> Customer#
+Order# --> Total_amount
+ 
+Following is in the BCNF
+* Order(Order#, Customer#, Order_date, Total_amount)  -- Order# is only determinant
+
+* Item(Item#, Price_each, Discount%)    -- Item# is only determinant
+
+* Order_Item(Order#, Item#, Quantity_ordered, Total_price) -- Order#, Item# is only determinant (candidate key)
+-------------------------------------------------------------------------------
+(4)
+
+Rx(Doctor#, Patient#, Date, Diagnosis, Treatment_code, Charge)
+
+Key for the above schema is Doctor#, Patient#, Date and has functional dependencies as following
+Doctor#, Patient#, Date --> Diagnosis
+Doctor#, Patient#, Date --> Treatment_code
+Treatment_code --> Charge
+
+Because there are no partial dependencies, the given relation is in 2NF already.  This however is not 3NF because the Charge is a non-key attribute that is determined by another non-key attribute, Treatment_code. We must decompose further:
+ 
+ Following is the final decomposition.
+ 
+* T1(Doctor#, Patient#, Date, Diagnosis, Treatment_code) -- Doctor#, Patient#, Date is only determinant (candidate key)
+
+* T2(Treatment_code, Charge)    -- Treatment_code is only determinant
+
